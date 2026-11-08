@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>贪恐指数 · 让情绪回到刻度上</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="landing.css">
+</head>
+<body class="landing">
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">贪</span>
+      <span class="logo-text">贪恐指数<em>Greed &amp; Fear</em></span>
+    </a>
+    <nav class="nav-links">
+      <a href="dashboard.html">市场雷达</a>
+      <a href="live.html">盘中实时</a>
+      <a href="dca.html">定投方案</a>
+      <a href="report.html">完整报告</a>
+    </nav>
+    <div class="nav-right">
+      <span class="asof">数据截至 <b id="asof">—</b></span>
+      <a class="ghost dark" href="dashboard.html">进入系统</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-left">
+        <h1>让情绪<br>回到刻度上。</h1>
+        <div class="script">Greed &amp; Fear Index</div>
+      </div>
+      <div class="hero-right">
+        <h2>以温度衡量情绪<br>用历史检验择时</h2>
+        <p>十个市场因子合成为 0–100 的贪婪温度，每日随量能、涨幅、宽度、估值同步更新。
+           每一条规则都在十年日线数据上跑过成本与滑点，结果好坏一并给出。</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="dashboard.html">进入市场雷达 <span>→</span></a>
+          <a class="btn text" href="dashboard.html#p-method">了解方法 <span>→</span></a>
+        </div>
+        <div class="hero-stat">
+          <div><em>当前温度</em><b id="curTemp">—</b></div>
+          <div><em>今日变化</em><b id="curChg">—</b></div>
+          <div><em>PE / 风险溢价</em><b id="curPe">—</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="preview">
+    <div class="preview-card">
+      <div class="pv-hd">
+        <span>Market Radar</span>
+        <span class="pv-tag">DEMO · 历史数据</span>
+      </div>
+      <div class="pv-chart" id="pvChart"></div>
+      <div class="pv-ft">
+        <span>沪深300ETF 510300 · 前复权 · 近 500 个交易日</span>
+        <span>下方为同期贪婪温度</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="what">
+    <div class="what-grid">
+      <div>
+        <h3>十个因子，一个读数</h3>
+        <p>趋势、强弱、宽度、新高新低、波动、量能、股债相对、杠杆、涨停强度、估值。
+           每个因子取过去 750 个交易日的滚动分位，等权平均。没有一项权重是照着历史收益调出来的。</p>
+      </div>
+      <div>
+        <h3>每天更新，不预测</h3>
+        <p>温度只回答一个问题：今天的市场，处在过去三年情绪分布的哪个位置。
+           它不预测点位，只把"现在贵不贵、热不热、敢不敢买"变成可以比较的数字。</p>
+      </div>
+      <div>
+        <h3>结论包括不利的</h3>
+        <p>回测页同时给出参数敏感性、温度分档检验和风控对照。
+           加止损能不能降回撤、降多少、代价是什么，都写在里面——包括对本策略不利的结果。</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>历史数据统计，不构成投资建议。配色遵循 A 股习惯：红涨绿跌。</span>
+    <span id="footGen">—</span>
+  </footer>
+</main>
+
+<script src="data/backtest.js"></script>
+<script src="landing.js"></script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>贪恐指数 · 市场雷达</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="#">
+      <span class="logo-mark">贪</span>
+      <span class="logo-text">贪恐指数<em>Market Radar</em></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">首页</a>
+      <a href="dashboard.html" class="on">市场雷达</a>
+      <a href="live.html">盘中实时</a>
+      <a href="dca.html">定投方案</a>
+      <a href="#p-method">方法</a>
+    </nav>
+    <div class="nav-right">
+      <span class="asof">数据截至 <b id="asof">—</b></span>
+      <a class="ghost" href="report.html">完整报告</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="page-hd">
+    <h1>让情绪变成可以回测的数字</h1>
+    <p>十个市场因子合成 0–100 的贪婪温度，每日随量能、涨幅、宽度、估值更新。配沪深300ETF 的确定性回测。</p>
+  </div>
+
+  <div class="grid">
+
+    <!-- K线 -->
+    <article class="card span8" id="p-kline" data-card="kline">
+      <div class="card-hd">
+        <div class="hd-left">
+          <h2>指数价格 K 线</h2>
+          <p><span class="sym">沪深300ETF</span><span class="code">510300.SH</span><span class="dot">·</span>前复权</p>
+        </div>
+        <div class="hd-right">
+          <div class="seg" id="tfSeg">
+            <button data-tf="d" class="on">日线</button>
+            <button data-tf="w">周线</button>
+            <button data-tf="m">月线</button>
+          </div>
+          <button class="xbtn" data-expand="kline" title="放大">⤢</button>
+        </div>
+      </div>
+      <div class="card-bd">
+        <div class="ma-bar">
+          <span class="ma-legend"><i style="background:#c0392b"></i>阳线</span>
+          <span class="ma-legend"><i style="background:#16785a"></i>阴线</span>
+          <label class="chk"><input type="checkbox" id="ma20" checked><span>MA20</span></label>
+          <label class="chk"><input type="checkbox" id="ma60" checked><span>MA60</span></label>
+          <label class="chk"><input type="checkbox" id="ma120"><span>MA120</span></label>
+          <span class="ma-hint" id="klineHint">—</span>
+        </div>
+        <div class="chart kline-chart" id="klineChart"></div>
+      </div>
+    </article>
+
+    <!-- 温度 -->
+    <article class="card span4" id="p-temp" data-card="temp">
+      <div class="card-hd">
+        <div class="hd-left">
+          <h2>贪婪温度</h2>
+          <p><span class="sym">全A口径</span><span class="dot">·</span>0–100</p>
+        </div>
+        <div class="hd-right">
+          <button class="xbtn" data-expand="temp" title="放大">⤢</button>
+        </div>
+      </div>
+      <div class="card-bd temp-bd">
+        <div class="temp-top">
+          <div class="temp-num"><span id="tempNow">—</span><em>/100</em></div>
+          <div class="temp-side">
+            <span class="tag" id="tempTag">—</span>
+            <div class="temp-lbl">最近信号 <b id="lastSignal">—</b></div>
+            <div class="temp-lbl">规则状态 <b id="curPos">—</b></div>
+          </div>
+        </div>
+        <div class="gauge">
+          <div class="gauge-track">
+            <div class="s1"></div><div class="s2"></div><div class="s3"></div><div class="s4"></div><div class="s5"></div>
+            <div class="gauge-marker" id="gaugeMarker"></div>
+          </div>
+          <div class="gauge-scale"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
+        </div>
+        <div class="delta-row">
+          <div><em>今日</em><b id="dChg1">—</b></div>
+          <div><em>5 日</em><b id="dChg5">—</b></div>
+          <div><em>20 日</em><b id="dChg20">—</b></div>
+          <div><em>PE / 溢价</em><b id="dPe">—</b></div>
+        </div>
+        <div class="chart temp-mini" id="tempMini"></div>
+        <div class="temp-foot" id="tempFoot">近 250 个交易日</div>
+      </div>
+    </article>
+
+    <!-- 四个因子小卡 -->
+    <article class="card span3 mini" data-card="breadth">
+      <div class="card-hd">
+        <div class="hd-left"><h2>市场宽度</h2><p>站上 20 日均线个股占比</p></div>
+        <div class="hd-right"><span class="score" id="scBreadth">—</span></div>
+      </div>
+      <div class="card-bd"><div class="chart spark" id="spBreadth"></div></div>
+    </article>
+
+    <article class="card span3 mini" data-card="hl">
+      <div class="card-hd">
+        <div class="hd-left"><h2>新高新低</h2><p>52 周新高减新低占比</p></div>
+        <div class="hd-right"><span class="score" id="scHl">—</span></div>
+      </div>
+      <div class="card-bd"><div class="chart spark" id="spHl"></div></div>
+    </article>
+
+    <article class="card span3 mini" data-card="limitup">
+      <div class="card-hd">
+        <div class="hd-left"><h2>涨停强度</h2><p>涨停减跌停家数占比</p></div>
+        <div class="hd-right"><span class="score" id="scLimit">—</span></div>
+      </div>
+      <div class="card-bd"><div class="chart spark" id="spLimit"></div></div>
+    </article>
+
+    <article class="card span3 mini" data-card="vol">
+      <div class="card-hd">
+        <div class="hd-left"><h2>波动率</h2><p>20 日年化已实现波动</p></div>
+        <div class="hd-right"><span class="score" id="scVol">—</span></div>
+      </div>
+      <div class="card-bd"><div class="chart spark" id="spVol"></div></div>
+    </article>
+
+    <!-- 回测 -->
+    <article class="card span7" id="p-backtest" data-card="bt">
+      <div class="card-hd">
+        <div class="hd-left">
+          <h2>净值与回撤</h2>
+          <p><span class="sym">贪恐温度策略</span><span class="dot">·</span><span id="btRange">—</span></p>
+        </div>
+        <div class="hd-right">
+          <div class="seg" id="periodSeg">
+            <button data-p="full" class="on">近十年</button>
+            <button data-p="five">近五年</button>
+          </div>
+          <button class="xbtn" data-expand="bt" title="放大">⤢</button>
+        </div>
+      </div>
+      <div class="card-bd">
+        <div class="bt-ctl">
+          <label class="ctl"><span>买入 ≤</span><input type="range" id="buyR" min="5" max="55" step="5" value="30"><output id="buyV">30</output></label>
+          <label class="ctl"><span>卖出 ≥</span><input type="range" id="sellR" min="55" max="95" step="5" value="75"><output id="sellV">75</output></label>
+          <span class="bt-note">拖动即时重算</span>
+        </div>
+        <div class="bt-metrics">
+          <div><em>累计收益</em><b id="mTotal">—</b></div>
+          <div><em>年化</em><b id="mCagr">—</b></div>
+          <div><em>最大回撤</em><b id="mMdd">—</b></div>
+          <div><em>Calmar</em><b id="mCalmar">—</b></div>
+          <div><em>平均仓位</em><b id="mPos">—</b></div>
+          <div><em>交易</em><b id="mTrades">—</b></div>
+        </div>
+        <div class="chart" id="navChart"></div>
+        <div class="chart dd-chart" id="ddChart"></div>
+        <div class="bench-line"><i></i>灰线为沪深300ETF 买入持有：累计 <b id="bTotal">—</b>，最大回撤 <b id="bMdd">—</b></div>
+      </div>
+    </article>
+
+    <!-- 因子拆解 -->
+    <article class="card span5" data-card="factors">
+      <div class="card-hd">
+        <div class="hd-left"><h2>因子拆解</h2><p>十因子等权 · 当前得分</p></div>
+        <div class="hd-right"><button class="xbtn" data-expand="factors" title="放大">⤢</button></div>
+      </div>
+      <div class="card-bd"><div class="flist" id="factorList"></div></div>
+    </article>
+
+    <!-- 热力图 -->
+    <article class="card span5" data-card="heat">
+      <div class="card-hd">
+        <div class="hd-left"><h2>参数敏感性</h2><p>买入阈值 × 卖出阈值 的十年结果</p></div>
+        <div class="hd-right">
+          <div class="seg sm" id="hmSeg">
+            <button data-m="cagr" class="on">年化</button>
+            <button data-m="mdd">回撤</button>
+            <button data-m="calmar">Calmar</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-bd"><div class="hm-wrap"><table class="hm" id="heatmap"></table></div>
+        <div class="foot-note">点击任意格子切换上方阈值。卖出 70–80、买入 25–45 是一片连续的高地，不是单点最优。</div>
+      </div>
+    </article>
+
+    <!-- 检验 -->
+    <article class="card span4" data-card="bucket">
+      <div class="card-hd">
+        <div class="hd-left"><h2>温度分档检验</h2><p>温度区间 → 未来 60 日表现</p></div>
+        <div class="hd-right"><button class="xbtn" data-expand="bucket" title="放大">⤢</button></div>
+      </div>
+      <div class="card-bd"><table class="mini-tb" id="tbBucket"></table>
+        <div class="foot-note">恐慌区胜率最高、贪婪区最低，但平均收益两端都为正——高位不等于必跌。</div>
+      </div>
+    </article>
+
+    <!-- 规则对照 -->
+    <article class="card span3" data-card="variants">
+      <div class="card-hd">
+        <div class="hd-left"><h2>规则对照</h2><p>加风控划不划算</p></div>
+        <div class="hd-right"><button class="xbtn" data-expand="variants" title="放大">⤢</button></div>
+      </div>
+      <div class="card-bd"><table class="mini-tb" id="tbVariant"></table>
+        <div class="foot-note">趋势止损能压低回撤，年化掉得更多。这是策略最真实的短板。</div>
+      </div>
+    </article>
+
+  </div>
+
+  <section class="method" id="p-method">
+    <h3>方法说明</h3>
+    <div class="method-grid">
+      <div>
+        <h4>因子与权重</h4>
+        <table class="mini-tb" id="tbSpec"></table>
+      </div>
+      <div>
+        <h4>回测假设</h4>
+        <ul class="assump">
+          <li>标的：沪深300ETF（510300），前复权，分红再投包含在价格里。</li>
+          <li>仓位：满仓或空仓两态，不加杠杆、不做空；空仓期收益按 0 计。</li>
+          <li>信号：T 日收盘算温度，T+1 日开盘成交，不使用未来数据。</li>
+          <li>成本：单边万三（佣金 + 冲击），ETF 免印花税。</li>
+          <li>数据：东方财富行情、沪深交易所两融、中债国债收益率、中证全指成交额。</li>
+        </ul>
+      </div>
+      <div>
+        <h4>已知局限</h4>
+        <ul class="assump">
+          <li>2018 型慢熊防不住，满仓承受 -31.5% 回撤。</li>
+          <li>全 A 宽度样本取当前在市个股，有幸存者偏差。</li>
+          <li>估值因子用中证指数公司口径的市盈率，与 Wind / 同花顺口径存在小幅差异。</li>
+          <li>北向资金 2024-08 起停止实时披露，无法做日频因子。</li>
+          <li>样本仅一个标的、一个十年，结论不宜外推为稳定 alpha。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>历史数据统计，不构成投资建议。配色遵循 A 股习惯：红涨绿跌。</span>
+    <span id="footGen">—</span>
+  </footer>
+</main>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="overlay-inner">
+    <div class="overlay-hd">
+      <h3 id="ovTitle">—</h3>
+      <button id="ovClose" class="xbtn" title="关闭">✕</button>
+    </div>
+    <div class="overlay-bd" id="ovBody"></div>
+  </div>
+</div>
+
+<script src="data/backtest.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

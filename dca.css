@@ -1,0 +1,88 @@
+/* 定投方案页 */
+.wrap { max-width: 1120px; }
+
+.page-hd h1 { font-size: 28px; }
+
+/* 当前建议 */
+.advice {
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  gap: 34px;
+  padding: 24px 28px 22px;
+  background: #15181b;
+  border-color: #15181b;
+  color: #fff;
+}
+.ad-label { font-size: 12px; color: #9aa1a8; letter-spacing: .5px; }
+.ad-main {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 4px 0 2px;
+  line-height: 1;
+}
+.ad-main span {
+  font-size: 68px;
+  font-weight: 600;
+  letter-spacing: -3px;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+}
+.ad-main em { font-style: normal; font-size: 18px; color: #9aa1a8; }
+.ad-amt { font-size: 13px; color: #b9bfc4; margin-top: 10px; }
+.ad-amt b { color: #fff; font-weight: 600; }
+.ad-reason {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #8f979f;
+  line-height: 1.8;
+  border-top: 1px solid #2a2e33;
+  padding-top: 12px;
+}
+
+.band-tb { width: 100%; font-size: 12px; }
+.band-tb th {
+  text-align: right; font-weight: 400; font-size: 10.5px; color: #6f767d;
+  padding: 0 0 8px; border-bottom: 1px solid #2a2e33;
+}
+.band-tb th:first-child { text-align: left; }
+.band-tb td {
+  text-align: right; padding: 7px 0; color: #cfd4d8;
+  border-bottom: 1px solid #22262a; font-variant-numeric: tabular-nums;
+}
+.band-tb td:first-child { text-align: left; color: #fff; }
+.band-tb tr:last-child td { border-bottom: 0; }
+.band-tb tr.now td { background: #23282d; }
+.band-tb tr.now td:first-child { color: #fff; font-weight: 600; }
+.band-tb .mul { font-weight: 600; color: #fff; }
+.band-tb .cnt { color: #6f767d; }
+
+/* 方案表 */
+.cmp-tb { width: 100%; border-collapse: collapse; font-size: 13px; }
+.cmp-tb th {
+  text-align: right; font-weight: 400; font-size: 11px; color: var(--ink-3);
+  padding: 0 0 9px; border-bottom: 1px solid var(--line);
+}
+.cmp-tb th:first-child { text-align: left; }
+.cmp-tb td {
+  text-align: right; padding: 10px 0; border-bottom: 1px solid var(--line-2);
+  font-variant-numeric: tabular-nums;
+}
+.cmp-tb td:first-child { text-align: left; }
+.cmp-tb tr:last-child td { border-bottom: 0; }
+.cmp-tb .nm { font-weight: 500; color: var(--ink); }
+.cmp-tb .dsc { font-size: 11px; color: var(--ink-4); margin-top: 1px; }
+.cmp-tb .best { color: var(--up); font-weight: 600; }
+.pill-note { font-size: 11px; color: var(--ink-4); }
+
+.two-col-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 900px) {
+  .advice { grid-template-columns: 1fr; gap: 22px; }
+  .two-col-cards { grid-template-columns: 1fr; }
+  .ad-main span { font-size: 52px; }
+}

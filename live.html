@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>盘中实时 · 贪恐指数</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="live.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">贪</span>
+      <span class="logo-text">贪恐指数<em>Greed &amp; Fear</em></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">首页</a>
+      <a href="dashboard.html">市场雷达</a>
+      <a href="live.html" class="on">盘中实时</a>
+      <a href="dca.html">定投方案</a>
+    </nav>
+    <div class="nav-right">
+      <span class="live-dot" id="liveDot"></span>
+      <span class="asof" id="mktStatus">—</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="page-hd">
+    <h1>盘中情绪与介入时点</h1>
+    <p>日频贪婪温度决定<b>仓位该多轻多重</b>，日内情绪决定<b>今天该不该下手</b>。两个数各管一件事，不要混着看。</p>
+  </div>
+
+  <div class="grid">
+
+    <!-- 今日情绪 -->
+    <article class="card span7">
+      <div class="card-hd">
+        <div class="hd-left">
+          <h2>今日情绪</h2>
+          <p><span class="sym">沪深300</span><span class="dot">·</span>盘中实时合成</p>
+        </div>
+        <div class="hd-right"><span class="upd" id="updTime">等待数据</span></div>
+      </div>
+      <div class="card-bd">
+        <div class="now-row">
+          <div class="now-num"><span id="liveTemp">—</span><em>/100</em></div>
+          <div class="now-meta">
+            <div class="nline">沪深300 <b id="idxPx">—</b> <span id="idxChg">—</span></div>
+            <div class="nline">成交额 <b id="amt">—</b> 亿　量能强度 <b id="volX">—</b></div>
+          </div>
+        </div>
+        <div class="chart" id="intraChart"></div>
+      </div>
+    </article>
+
+    <!-- 建议 -->
+    <article class="card span5">
+      <div class="card-hd">
+        <div class="hd-left"><h2>现在该做什么</h2><p>日频温度 × 日内情绪</p></div>
+      </div>
+      <div class="card-bd">
+        <div class="verdict" id="verdict">
+          <div class="v-tag" id="vTag">—</div>
+          <div class="v-main" id="vMain">—</div>
+          <div class="v-sub" id="vSub">—</div>
+        </div>
+        <div class="anchor">
+          <div><em>日频贪婪温度</em><b id="dayTemp">—</b><span id="dayTempTag">—</span></div>
+          <div><em>对应定投倍数</em><b id="dayMult">—</b><span>按分档表</span></div>
+        </div>
+        <div class="foot-note" id="verdictNote"></div>
+      </div>
+    </article>
+
+    <!-- 四维 -->
+    <article class="card span12">
+      <div class="card-hd">
+        <div class="hd-left"><h2>日内情绪拆解</h2><p>四个维度等权，各 25 分</p></div>
+      </div>
+      <div class="card-bd">
+        <div class="dims" id="dims"></div>
+      </div>
+    </article>
+
+    <!-- 说明 -->
+    <article class="card span12">
+      <div class="card-hd">
+        <div class="hd-left"><h2>这套东西能给什么，不能给什么</h2><p>先把边界说清楚</p></div>
+      </div>
+      <div class="card-bd">
+        <div class="two-col-cards">
+          <div>
+            <h4 style="font-size:12px;color:var(--ink-2);margin:0 0 8px">能给的</h4>
+            <ul class="assump">
+              <li>今天市场是恐慌还是亢奋，用 0–100 显示，盘中每 30 秒更新。</li>
+              <li>结合日频温度，给出「今天下手 / 等回踩 / 不买」的执行建议。</li>
+              <li>对沪深300ETF 这类宽基，建议是可以直接执行的。</li>
+            </ul>
+          </div>
+          <div>
+            <h4 style="font-size:12px;color:var(--ink-2);margin:0 0 8px">不能给的</h4>
+            <ul class="assump">
+              <li><b>不能给个股买卖点和价位。</b>这是市场级情绪指标，个股走势由自身基本面、资金和事件决定，用大盘温度选个股会误导。</li>
+              <li>不能预测盘中高低点。日内情绪只描述当下状态，不含预测能力。</li>
+              <li>不含 Level-2 资金流、龙虎榜、席位数据。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <footer class="foot">
+    <span>数据来自东方财富公开行情接口，浏览器直连，不经过本机。仅作情绪观察，不构成投资建议。</span>
+    <span id="footGen">—</span>
+  </footer>
+</main>
+
+<script src="data/backtest.js"></script>
+<script src="live.js"></script>
+</body>
+</html>

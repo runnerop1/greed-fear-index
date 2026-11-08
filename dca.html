@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>定投方案 · 贪恐指数</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="dca.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">贪</span>
+      <span class="logo-text">贪恐指数<em>Greed &amp; Fear</em></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">首页</a>
+      <a href="dashboard.html">市场雷达</a>
+      <a href="live.html">盘中实时</a>
+      <a href="dca.html" class="on">定投方案</a>
+      <a href="report.html">完整报告</a>
+    </nav>
+    <div class="nav-right">
+      <span class="asof">数据截至 <b id="asof">—</b></span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="page-hd">
+    <h1>定投沪深300，什么时候该多投</h1>
+    <p>把贪婪温度接进定投节奏：温度低时加倍，温度高时减半或停投。以下每个数字都在十年月频数据上跑过，包括对这套做法不利的结果。</p>
+  </div>
+
+  <!-- 当前建议 -->
+  <div class="card advice">
+    <div class="advice-left">
+      <div class="ad-label">本月建议</div>
+      <div class="ad-main">
+        <span id="adMult">—</span><em>倍</em>
+      </div>
+      <div class="ad-amt">基准 <b id="adBase">10,000</b> → 本期 <b id="adAmt">—</b> 元</div>
+      <div class="ad-reason" id="adReason">—</div>
+    </div>
+    <div class="advice-right">
+      <table class="mini-tb band-tb" id="bandTb"></table>
+    </div>
+  </div>
+
+  <!-- 方案对比 -->
+  <div class="card">
+    <div class="card-hd">
+      <div class="hd-left">
+        <h2>三种做法，十年结果</h2>
+        <p><span class="sym">月频定投</span><span class="dot">·</span><span id="dcaRange">—</span></p>
+      </div>
+      <div class="hd-right"><span class="pill-note">每期基准 1 万元</span></div>
+    </div>
+    <div class="card-bd">
+      <table class="cmp-tb" id="planTb"></table>
+      <div class="chart" id="retChart" style="margin-top:14px"></div>
+      <div class="foot-note" id="retNote"></div>
+    </div>
+  </div>
+
+  <!-- 成本 -->
+  <div class="card">
+    <div class="card-hd">
+      <div class="hd-left">
+        <h2>平均持仓成本</h2>
+        <p>虚线为当时的沪深300ETF 价格</p>
+      </div>
+    </div>
+    <div class="card-bd">
+      <div class="chart" id="costChart"></div>
+      <div class="foot-note" id="costNote"></div>
+    </div>
+  </div>
+
+  <!-- 敏感性 -->
+  <div class="two-col-cards">
+    <div class="card">
+      <div class="card-hd">
+        <div class="hd-left"><h2>倍数方案的敏感性</h2><p>改倍数会不会把结论改掉</p></div>
+      </div>
+      <div class="card-bd"><table class="mini-tb" id="sensTb"></table>
+        <div class="foot-note">全样本、前后两段分开看，加码越重 IRR 越高，方向一致。前段 2016-11~2021-10，后段 2021-11~2026-11。</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">
+        <div class="hd-left"><h2>贪婪清仓，划算吗</h2><p>温度触及阈值时把持仓全部卖出</p></div>
+      </div>
+      <div class="card-bd"><table class="mini-tb" id="tpTb"></table>
+        <div class="foot-note" id="tpNote"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 方法 -->
+  <section class="method">
+    <h3>方法与局限</h3>
+    <div class="method-grid">
+      <div>
+        <h4>计算口径</h4>
+        <ul class="assump">
+          <li>每期在每月第一个交易日按当日收盘价买入沪深300ETF（510300，前复权，含分红再投）。</li>
+          <li>金额 = 基准 1 万元 × 当期倍数。倍数只由当日温度决定，不看后续行情。</li>
+          <li>IRR 为月度现金流内部收益率折年，能反映"钱是什么时候投进去的"。</li>
+          <li>最大浮亏 = 账户市值相对累计投入的最大折价，是定投最该看的风险指标。</li>
+        </ul>
+      </div>
+      <div>
+        <h4>这套做法的本质</h4>
+        <ul class="assump">
+          <li>不是择时，是「在便宜的时候多买一点」。</li>
+          <li>它降低平均成本，但不改变你最终赚多少的大头——大头仍来自指数本身的长期回报。</li>
+          <li>温度只调节节奏，不预测点位。</li>
+        </ul>
+      </div>
+      <div>
+        <h4>已知局限</h4>
+        <ul class="assump">
+          <li>样本只有 121 个月、一轮半牛熊，结论不宜外推。</li>
+          <li>IRR 提升约 0.6 个百分点，绝对幅度不大，别指望它翻倍。</li>
+          <li>加码需要额外现金；钱不够时只能按 1 倍投，收益会回到基准附近。</li>
+          <li>未计交易佣金与冲击成本（ETF 佣金极低，影响小于 0.05%）。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>历史数据统计，不构成投资建议。配色遵循 A 股习惯：红涨绿跌。</span>
+    <span id="footGen">—</span>
+  </footer>
+</main>
+
+<script src="data/backtest.js"></script>
+<script src="data/dca.js"></script>
+<script src="dca.js"></script>
+</body>
+</html>

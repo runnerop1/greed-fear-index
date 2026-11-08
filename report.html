@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A股贪恐指数 · 回测报告</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div>
+        <div class="brand">A股贪恐指数<span class="dot">.</span></div>
+        <div class="sub">十因子合成的市场情绪温度，与沪深300ETF 择时回测</div>
+      </div>
+      <div class="topmeta">
+        回测区间 <b id="metaRange">—</b><br>
+        数据截至 <b id="metaEnd">—</b> · 生成 <b id="metaGen">—</b>
+      </div>
+    </div>
+  </div>
+
+  <!-- 当前温度 -->
+  <div class="card hero">
+    <div>
+      <div class="hero-label">当前贪婪温度</div>
+      <div class="hero-value"><span id="tempNow" class="num">—</span><span class="hero-unit">/100</span></div>
+      <div class="hero-tag" id="tempTag">—</div>
+      <div class="hero-sub" id="heroSub"></div>
+    </div>
+    <div>
+      <div class="hero-right-top">
+        <span class="t">温度刻度</span>
+        <span class="d" id="tempDate">—</span>
+      </div>
+      <div class="gauge">
+        <div class="gauge-track">
+          <div class="gauge-seg s1"></div>
+          <div class="gauge-seg s2"></div>
+          <div class="gauge-seg s3"></div>
+          <div class="gauge-seg s4"></div>
+          <div class="gauge-seg s5"></div>
+          <div class="gauge-marker" id="gaugeMarker" style="left:0"></div>
+        </div>
+        <div class="gauge-scale num">
+          <span>0</span><span>25</span><span>50</span><span>75</span><span>100</span>
+        </div>
+        <div class="gauge-legend">
+          <span>极度恐慌</span><span>恐慌</span><span>中性</span><span>贪婪</span><span>极度贪婪</span>
+        </div>
+      </div>
+      <div class="signal-row">
+        <div>最近信号 <span class="v" id="lastSignal">—</span></div>
+        <div>回测规则当前状态 <span class="v" id="curPos">—</span></div>
+        <div>持仓浮动 <span class="v" id="curFloat">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 参数 -->
+  <div class="card controls">
+    <div class="ctl">
+      <label for="buyR">买入阈值</label>
+      <input type="range" id="buyR" min="5" max="55" step="5" value="30">
+      <output id="buyV">30</output>
+    </div>
+    <div class="ctl">
+      <label for="sellR">卖出阈值</label>
+      <input type="range" id="sellR" min="55" max="95" step="5" value="75">
+      <output id="sellV">75</output>
+    </div>
+    <div class="ctl">
+      <span>回测区间</span>
+      <div class="segment" id="periodSeg">
+        <button data-p="full" class="on">近十年</button>
+        <button data-p="five">近五年</button>
+      </div>
+    </div>
+    <div class="ctl-hint">拖动滑块即时重算，与下方固定表格口径一致</div>
+  </div>
+
+  <!-- 一、核心表现 -->
+  <div class="card" id="sec1">
+    <div class="sec-title" id="sec1Title">一、过去十年核心表现</div>
+    <p class="sec-note" id="note1">—</p>
+    <div class="metrics">
+      <div class="metric">
+        <div class="k">累计收益率</div>
+        <div class="v num" id="mTotal">—</div>
+        <div class="b num" id="bTotal">—</div>
+      </div>
+      <div class="metric">
+        <div class="k">年化收益率</div>
+        <div class="v num" id="mCagr">—</div>
+        <div class="b num" id="bCagr">—</div>
+      </div>
+      <div class="metric">
+        <div class="k">最大回撤</div>
+        <div class="v num" id="mMdd">—</div>
+        <div class="b num" id="bMdd">—</div>
+      </div>
+    </div>
+    <table class="tb">
+      <thead>
+        <tr><th>关键指标</th><th>贪恐温度策略</th><th>沪深300ETF 买入持有</th></tr>
+      </thead>
+      <tbody id="tbCore"></tbody>
+    </table>
+    <details class="trades">
+      <summary>逐笔交易明细（<span id="tradeCount">0</span> 笔）</summary>
+      <table class="tb" style="margin-top:8px">
+        <thead><tr><th>买入</th><th>卖出</th><th>持有交易日</th><th>区间收益</th></tr></thead>
+        <tbody id="tbTrades"></tbody>
+      </table>
+    </details>
+  </div>
+
+  <!-- 净值 -->
+  <div class="card">
+    <div class="sec-title">净值与回撤</div>
+    <p class="sec-note">策略以沪深300ETF（510300）为标的，满仓或空仓，不融资不加杠杆；净值以 1.00 为起点。</p>
+    <div class="chart-legend">
+      <span><i style="background:#c0392b"></i>贪恐温度策略</span>
+      <span><i style="background:#9aa1a9"></i>沪深300ETF 买入持有</span>
+    </div>
+    <div class="chart" id="navChart"></div>
+    <div style="height:26px"></div>
+    <div class="chart-legend">
+      <span><i style="background:#e6b3ab"></i>策略回撤</span>
+      <span><i style="background:#c9cdd2"></i>基准回撤</span>
+    </div>
+    <div class="chart" id="ddChart"></div>
+  </div>
+
+  <!-- 二、最近五年 -->
+  <div class="card">
+    <div class="sec-title">二、最近五年表现</div>
+    <p class="sec-note" id="note5">—</p>
+    <table class="tb">
+      <thead><tr><th>指标</th><th>贪恐温度策略</th><th>沪深300ETF 买入持有</th></tr></thead>
+      <tbody id="tbFive"></tbody>
+    </table>
+  </div>
+
+  <!-- 三、温度走势 -->
+  <div class="card">
+    <div class="sec-title">三、贪恐温度与沪深300ETF</div>
+    <p class="sec-note">上图为每日贪婪温度（0–100），下图为其对应的沪深300ETF 前复权价格；虚线为 30 / 75 两个阈值，底色分别为买入区与卖出区。</p>
+    <div class="chart" id="tempChart"></div>
+  </div>
+
+  <!-- 四、因子 -->
+  <div class="card">
+    <div class="sec-title">四、因子拆解</div>
+    <p class="sec-note">每个因子先算原始值，再取过去 750 个交易日（约三年）的滚动分位，映射到 0–100；反向因子已取负。总温度取十因子等权平均。</p>
+    <div id="factorList"></div>
+    <div class="note-box" id="factorNote"></div>
+  </div>
+
+  <!-- 五、分年度 -->
+  <div class="card">
+    <div class="sec-title">五、分年度收益</div>
+    <p class="sec-note">按自然年拆分，首尾年份为不完整年度。</p>
+    <div class="chart" id="yearChart" style="margin-bottom:18px"></div>
+    <table class="tb">
+      <thead><tr><th>年度</th><th>策略</th><th>沪深300ETF</th><th>超额</th></tr></thead>
+      <tbody id="tbYear"></tbody>
+    </table>
+  </div>
+
+  <!-- 六、参数敏感性 -->
+  <div class="card">
+    <div class="sec-title">六、参数敏感性</div>
+    <p class="sec-note">买卖阈值全组合的十年结果。点击任意格子可把上方参数切到该组合。</p>
+    <div class="ctl" style="margin-bottom:14px">
+      <div class="segment" id="hmSeg">
+        <button data-m="cagr" class="on">年化收益 %</button>
+        <button data-m="mdd">最大回撤 %</button>
+        <button data-m="calmar">Calmar</button>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="hm" id="heatmap"></table>
+    </div>
+    <div class="footnote" id="hmNote"></div>
+  </div>
+
+  <!-- 七、有效性检验 -->
+  <div class="card">
+    <div class="sec-title">七、有效性检验</div>
+    <p class="sec-note">指数到底有没有预测力，规则到底有没有加值。以下两组检验都是同区间、同成本、同标的下算出来的，包含对本策略不利的结果。</p>
+
+    <div style="font-size:13.5px;font-weight:500;margin:6px 0 12px">温度分档与未来收益</div>
+    <table class="tb">
+      <thead><tr><th>温度区间</th><th>样本天数</th><th>未来 20 日</th><th>20 日胜率</th><th>未来 60 日</th><th>60 日胜率</th></tr></thead>
+      <tbody id="tbBucket"></tbody>
+    </table>
+    <div class="footnote" id="bucketNote"></div>
+
+    <div style="font-size:13.5px;font-weight:500;margin:30px 0 12px">规则变体对照</div>
+    <table class="tb">
+      <thead><tr><th>规则</th><th>年化收益</th><th>最大回撤</th><th>Calmar</th></tr></thead>
+      <tbody id="tbVariant"></tbody>
+    </table>
+    <div class="note-box" id="variantNote"></div>
+  </div>
+
+  <!-- 八、方法 -->
+  <div class="card">
+    <div class="sec-title">八、方法与数据说明</div>
+    <div class="two-col" style="margin-top:16px">
+      <div>
+        <div style="font-size:13.5px;font-weight:500;margin-bottom:8px">因子与权重</div>
+        <table class="tb">
+          <tbody id="tbSpec"></tbody>
+        </table>
+      </div>
+      <div>
+        <div style="font-size:13.5px;font-weight:500;margin-bottom:8px">数据来源</div>
+        <table class="tb">
+          <tbody id="tbSrc"></tbody>
+        </table>
+      </div>
+    </div>
+    <div style="font-size:13.5px;font-weight:500;margin:28px 0 10px">回测假设</div>
+    <div class="footnote" id="assump"></div>
+    <div style="font-size:13.5px;font-weight:500;margin:24px 0 10px">已知局限</div>
+    <div class="note-box" id="limits"></div>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      数据来源：东方财富行情接口、中证指数公司、中债估值、沪深交易所融资融券数据。<br>
+      本页为历史数据统计，不构成投资建议。历史表现不代表未来收益。
+    </div>
+    <div style="text-align:right;white-space:nowrap">
+      配色遵循 A 股习惯：红涨绿跌<br>
+      <span id="footGen">—</span>
+    </div>
+  </div>
+</footer>
+
+<script src="data/backtest.js"></script>
+<script src="report.js"></script>
+</body>
+</html>
