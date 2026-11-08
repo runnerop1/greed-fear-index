@@ -1,0 +1,6 @@
+# 页面运行时只需要 .js 数据文件，.json 是构建中间产物
+data/*.json
+
+# 系统文件
+.DS_Store
+Thumbs.db
